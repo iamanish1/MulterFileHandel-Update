@@ -11,7 +11,6 @@ const testRoute = async (req, res) => {
         emailMatch: req.body.email === email,
         passwordMatch: req.body.password === password,
       },
-     
     });
   } catch (error) {
     console.error("Error:", error); // Log error for debugging

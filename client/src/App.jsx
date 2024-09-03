@@ -4,12 +4,12 @@ import Header from "./components/Header";
 import axios from 'axios';
 
 function App() {
-  // Separate state for form data and the file
+  // Separate state for form data and the files
   const [formData, setFormData] = useState({
     name: "",
     email: ""
   });
-  const [file, setFile] = useState(null); // State to hold the selected file
+  const [files, setFiles] = useState([]); // State to hold selected files
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -20,12 +20,11 @@ function App() {
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]); // Get the first selected file
+    setFiles([...e.target.files]); // Get all selected files
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
-    console.log(formData, file);
+  const handleSubmit = async (file) => {
+    console.log("Submitting:", formData, file);
 
     try {
       // Use FormData to handle file upload
@@ -43,7 +42,7 @@ function App() {
         },
       });
 
-      console.log('Data sent successfully');
+      console.log('Data sent successfully for file:', file.name);
     } catch (error) {
       console.error('Error:', error.response ? error.response.data : error.message);
     }
@@ -51,11 +50,11 @@ function App() {
 
   const handleMultipleSubmit = async (e) => {
     e.preventDefault(); // Prevent default button behavior
-    // Simulate multiple form submissions
+    // Simulate multiple form submissions for different files
     try {
-      for (let i = 0; i < 10; i++) {
-        await handleSubmit(e); // Pass the event to handleSubmit
-        console.log(`Form ${i + 1} submitted successfully`);
+      for (let i = 0; i < files.length; i++) {
+        await handleSubmit(files[i]); // Pass each file to handleSubmit
+        console.log(`Form with file ${files[i].name} submitted successfully`);
       }
     } catch (error) {
       console.log(error);
@@ -97,7 +96,7 @@ function App() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="file">File:</label>
+                  <label htmlFor="file">Files:</label>
                 </div>
                 <div className="bg-slate-100 p-2 mb-2">
                   <input
@@ -106,17 +105,10 @@ function App() {
                     name="file"
                     required
                     onChange={handleFileChange} // Use the separate file handler
-                    multiple
+                    multiple // Allow multiple files to be selected
                   />
                 </div>
 
-                <button
-                  className="lg: bg-black text-white px-6 py-[1.5vmin] w-full max-w-[150px] text-[2.5vmin] rounded-full hover:scale-110 transition-all mx-auto block mt-6 max-sm:px-1 max-sm:text-sm max-md:text-sm max-lg:mx-auto"
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </button>
-                
                 <button
                   className="lg: bg-black text-white px-6 py-[1.5vmin] w-full max-w-[150px] text-[2.5vmin] rounded-full hover:scale-110 transition-all mx-auto block mt-6 max-sm:px-1 max-sm:text-sm max-md:text-sm max-lg:mx-auto"
                   onClick={handleMultipleSubmit}
