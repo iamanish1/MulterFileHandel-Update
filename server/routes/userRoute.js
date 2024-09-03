@@ -3,6 +3,6 @@ import { testRoute } from '../controller/testController.js';
 
 const userRoutes = express.Router() ; 
 
-userRoutes.get('/user' , testRoute)
+userRoutes.post('/user' , testRoute)
 
 export default userRoutes ; 
